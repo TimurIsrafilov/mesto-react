@@ -19,4 +19,3 @@
 
 ### Ссылка на проект:
 https://timurisrafilov.github.io/mesto/
-
