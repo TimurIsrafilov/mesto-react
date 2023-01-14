@@ -18,7 +18,7 @@ function App() {
 
   const [cards, setCards] = useState([]);
 
-  const [selectedCard, setSelectedCard] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     api.getProfileInfo().then((res) => {
@@ -50,7 +50,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   }
 
   return (
