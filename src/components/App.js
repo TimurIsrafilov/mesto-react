@@ -7,12 +7,7 @@ import ImagePopup from "./ImagePopup";
 import { useState } from "react";
 import api from "../utils/api";
 
-/////
 import { CurrentUserContext, currentUser } from '../contexts/CurrentUserContext';
-// import { CurrentCardContext, currentCard } from '../contexts/CurrentCardContext';
-/////
-
-
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -26,9 +21,6 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState(null);
-
-  // const [currentCard, setCurrentCard] = useState(null);
-  // const [likedCard, setLikedCard] = useState(null);
 
   useEffect(() => {
     api.getInitialCards().then((res) => {
@@ -44,6 +36,10 @@ function App() {
     });
   }, []);
 
+  // const [state, setCardsa] = useState([]);
+
+  const [likedCards, setLikedCards] = useState([]);
+
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -52,7 +48,7 @@ function App() {
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
+      setLikedCards((likedCards) => likedCards.map((c) => (c._id === card._id ? newCard : c)));
     });
   }
 
