@@ -25,7 +25,7 @@ function Card(props) {
       {isOwn && (
         <div
           className="elements__trash-icon"
-          // onClick={handleDeleteClick}
+          onClick={props.handleDeleteClick}
         ></div>
       )}
       <img
@@ -43,7 +43,7 @@ function Card(props) {
             aria-label="поставить нравиться"
             // onClick={props.onCardLike(props.card)}
             onClick={props.onCardLike}
-      
+ 
 
           ></button>
           <span className="elements__likes-number">{props.likes.length}</span>
