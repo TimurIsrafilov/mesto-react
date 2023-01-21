@@ -1,12 +1,33 @@
+import React from "react";
+import {
+  CurrentUserContext,
+  currentUser,
+} from "../contexts/CurrentUserContext";
+
 function Card(props) {
-    
+
+  const currentUser = React.useContext(CurrentUserContext);
+
   const handleCardClick = () => {
     props.onCardClick(props.card);
   };
 
+  const isOwn = props.card.owner._id === currentUser._id;
+
+  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+
+  const cardLikeButtonClassName = `elements__group ${
+    isLiked && "elements__group_active"
+  }`;
+
   return (
     <div className="elements__element">
-      <div className="elements__trash-icon"></div>
+      {isOwn && (
+        <div
+          className="elements__trash-icon"
+          // onClick={handleDeleteClick}
+        ></div>
+      )}
       <img
         src={props.link}
         alt={props.name}
@@ -18,8 +39,11 @@ function Card(props) {
         <div className="elements__like-container">
           <button
             type="button"
-            className="elements__group"
+            className={cardLikeButtonClassName}
             aria-label="поставить нравиться"
+            onClick={props.onCardLike(props.card)}
+     
+
           ></button>
           <span className="elements__likes-number">{props.likes.length}</span>
         </div>

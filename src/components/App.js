@@ -7,32 +7,57 @@ import ImagePopup from "./ImagePopup";
 import { useState } from "react";
 import api from "../utils/api";
 
+/////
+import { CurrentUserContext, currentUser } from '../contexts/CurrentUserContext';
+// import { CurrentCardContext, currentCard } from '../contexts/CurrentCardContext';
+/////
+
+
+
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
+  // const [userName, setUserName] = useState("");
+  // const [userDescription, setUserDescription] = useState("");
+  // const [userAvatar, setUserAvatar] = useState("");
 
   const [cards, setCards] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState(null);
 
-  useEffect(() => {
-    api.getProfileInfo().then((res) => {
-      setUserName(res.name);
-      setUserDescription(res.about);
-      setUserAvatar(res.avatar);
-    });
-  }, []);
+  // const [currentCard, setCurrentCard] = useState(null);
+  // const [likedCard, setLikedCard] = useState(null);
 
   useEffect(() => {
     api.getInitialCards().then((res) => {
       setCards(res);
     });
   }, []);
+
+  const [currentUser, setCurrentUser] = useState("");
+
+  useEffect(() => {
+    api.getProfileInfo().then((res) => {
+      setCurrentUser(res);
+    });
+  }, []);
+
+
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    
+
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+      setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
+    });
+  }
+
+
+
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -51,23 +76,33 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setSelectedCard(null);
+    // setCurrentCard(null);
   }
 
   return (
     <div className="App">
+
+      <CurrentUserContext.Provider value={currentUser}>
+
       <div className="page">
         <Header />
 
+
+        
         <Main
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
-          userName={userName}
-          userDescription={userDescription}
-          userAvatar={userAvatar}
+          // userName={userName}
+          // userDescription={userDescription}
+          // userAvatar={userAvatar}
           cards={cards}
           onCardClick={setSelectedCard}
+          // onCardClick={setCurrentCard}
+          onCardLike={handleCardLike}
+
         />
+        
 
         <PopupWithForm
           name="profile"
@@ -160,6 +195,9 @@ function App() {
 
         <Footer />
       </div>
+
+      </CurrentUserContext.Provider>
+
     </div>
   );
 }

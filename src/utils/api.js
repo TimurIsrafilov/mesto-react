@@ -58,21 +58,80 @@ class Api {
     .then(this._getResponseData)
   }
 
-  addLike(id) {
+  // addLike(id) {
+  //   return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //     method: "PUT",
+  //     headers: this._headers,
+  //   })
+  //   .then(this._getResponseData)
+  // }
+
+  // deleteLike(id) {
+  //   return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //     method: "DELETE",
+  //     headers: this._headers,
+  //   })
+  //   .then(this._getResponseData)
+  // }
+
+
+  /////////////
+
+
+  // changeLikeCardStatus(id, like) {
+  //   if (like) {
+  //     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //       method: "DELETE",
+  //       headers: this._headers,
+  //     })
+  //     .then(this._getResponseData)
+  //   }     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //     method: "PUT",
+  //     headers: this._headers,
+  //   })
+  //   .then(this._getResponseData)
+  // }
+
+  // changeLikeCardStatus(id, like) {
+  //   const selectMethod = like ? "DELETE" : "PUT";
+  //     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //       method: `${selectMethod}`,
+  //       headers: this._headers,
+  //     })
+  //     .then(this._getResponseData)
+  //   }     
+  // }
+
+
+  changeLikeCardStatus(id, like) {
+    const selectMethod = like ? "PUT" : "DELETE";
     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-      method: "PUT",
+      method: selectMethod,
       headers: this._headers,
     })
     .then(this._getResponseData)
   }
 
-  deleteLike(id) {
-    return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-      method: "DELETE",
-      headers: this._headers,
-    })
-    .then(this._getResponseData)
-  }
+  // addLike(id) {
+  //   return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //     method: "PUT",
+  //     headers: this._headers,
+  //   })
+  //   .then(this._getResponseData)
+  // }
+
+  // deleteLike(id) {
+  //   return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+  //     method: "DELETE",
+  //     headers: this._headers,
+  //   })
+  //   .then(this._getResponseData)
+  // }
+
+
+////////////////
+
+
 
   updateAvatar(avatar) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
