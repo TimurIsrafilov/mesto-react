@@ -5,11 +5,18 @@ import {
 } from "../contexts/CurrentUserContext";
 
 function Card(props) {
-
   const currentUser = React.useContext(CurrentUserContext);
 
   const handleCardClick = () => {
     props.onCardClick(props.card);
+  };
+
+  const handleLikeClick = () => {
+    props.onCardLike(props.card);
+  };
+
+  const handleDeleteClick = () => {
+    props.onCardDelete(props.card);
   };
 
   const isOwn = props.card.owner._id === currentUser._id;
@@ -23,10 +30,7 @@ function Card(props) {
   return (
     <div className="elements__element">
       {isOwn && (
-        <div
-          className="elements__trash-icon"
-          onClick={props.handleDeleteClick}
-        ></div>
+        <div className="elements__trash-icon" onClick={handleDeleteClick}></div>
       )}
       <img
         src={props.link}
@@ -41,10 +45,7 @@ function Card(props) {
             type="button"
             className={cardLikeButtonClassName}
             aria-label="поставить нравиться"
-            // onClick={props.onCardLike(props.card)}
-            onClick={props.onCardLike}
- 
-
+            onClick={handleLikeClick}
           ></button>
           <span className="elements__likes-number">{props.likes.length}</span>
         </div>

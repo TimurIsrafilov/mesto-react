@@ -39,8 +39,6 @@ function App() {
     });
   }, []);
 
-  // const [state, setCardsa] = useState([]);
-
   const [likedCard, setLikedCard] = useState([]);
 
   function handleCardLike(card) {
@@ -80,7 +78,6 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setSelectedCard(null);
-    // setCurrentCard(null);
   }
 
   return (
@@ -98,7 +95,6 @@ function App() {
             // userAvatar={userAvatar}
             cards={cards}
             onCardClick={setSelectedCard}
-            // onCardClick={setCurrentCard}
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
           />
