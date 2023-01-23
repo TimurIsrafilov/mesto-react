@@ -1,5 +1,4 @@
 function ImagePopup(props) {
-  // debugger
   return (
     <div className={`popup popup_photo ${props.card ? "popup_opened" : ""}`}>
       <div className="popup__container">
@@ -8,7 +7,9 @@ function ImagePopup(props) {
           alt={props.card ? props.card.name : ""}
           className="popup__mask-group"
         />
-        <h2 className="popup__phototitle">{props.card ? props.card.name : ""}</h2>
+        <h2 className="popup__phototitle">
+          {props.card ? props.card.name : ""}
+        </h2>
         <button
           type="button"
           className="popup__close-icon"

@@ -1,25 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
-import { useState } from "react";
 import api from "../utils/api";
-
-import {
-  CurrentUserContext,
-  currentUser,
-} from "../contexts/CurrentUserContext";
+import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-
-  // const [userName, setUserName] = useState("");
-  // const [userDescription, setUserDescription] = useState("");
-  // const [userAvatar, setUserAvatar] = useState("");
 
   const [cards, setCards] = useState([]);
 
@@ -31,6 +25,13 @@ function App() {
     });
   }, []);
 
+  function handleAddPlaceSubmit(data) {
+    api.addNewCard(data.name, data.link).then((res) => {
+      setCards([res, ...cards]);
+      closeAllPopups();
+    });
+  }
+
   const [currentUser, setCurrentUser] = useState("");
 
   useEffect(() => {
@@ -39,26 +40,34 @@ function App() {
     });
   }, []);
 
-  const [likedCard, setLikedCard] = useState([]);
+  function handleUpdateUser(user) {
+    api.editProfileInfo(user.name, user.about).then((res) => {
+      setCurrentUser(res);
+      closeAllPopups();
+    });
+  }
+
+  function handleUpdateAvatar(user) {
+    api.updateAvatar(user.avatar).then((res) => {
+      setCurrentUser(res);
+      closeAllPopups();
+    });
+  }
 
   function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
+    // Проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setLikedCard((likedCard) =>
-        likedCard.map((c) => (c._id === card._id ? newCard : c))
-      );
+      setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
     });
   }
 
-  const [deletedCard, setDeletedCard] = useState([]);
-
   function handleCardDelete(card) {
     api.deleteCard(card._id).then((res) => {
-      setDeletedCard(res);
-      });
+      setCards((cards) => cards.filter((c) => c._id !== card._id));
+    });
   }
 
   function handleEditProfileClick() {
@@ -90,91 +99,29 @@ function App() {
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
-            // userName={userName}
-            // userDescription={userDescription}
-            // userAvatar={userAvatar}
             cards={cards}
             onCardClick={setSelectedCard}
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
           />
 
-          <PopupWithForm
-            name="profile"
-            title="Редактировать профиль"
+          <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-          >
-            <input
-              id="name-input"
-              type="text"
-              // value=""
-              placeholder="Имя"
-              name="name"
-              required
-              className="popup__input popup__input_type_name"
-              // minLength="2"
-              // maxLength="40"
-            />
-            <span className="popup__input-error name-input-error"></span>
-            <input
-              id="profession-input"
-              type="text"
-              // value=""
-              placeholder="Профессия"
-              name="profession"
-              required
-              className="popup__input popup__input_type_profession"
-              // minLength="2"
-              // maxLength="200"
-            />
-            <span className="popup__input-error profession-input-error"></span>
-          </PopupWithForm>
+            onUpdateUser={handleUpdateUser}
+          />
 
-          <PopupWithForm
-            name="card"
-            title="Новое место"
-            isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}
-          >
-            <input
-              id="place-input"
-              type="text"
-              placeholder="Название"
-              name="place"
-              required
-              className="popup__input popup__input_type_place"
-              // minLength="2"
-              // maxLength="30"
-            />
-            <span className="popup__input-error place-input-error"></span>
-            <input
-              id="reference-input"
-              type="url"
-              placeholder="Ссылка на картинку"
-              name="reference"
-              required
-              className="popup__input popup__input_type_reference"
-            />
-            <span className="popup__input-error reference-input-error"></span>
-          </PopupWithForm>
-
-          <PopupWithForm
-            name="avatar"
-            title="Обновить аватар"
+          <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
-          >
-            <input
-              id="avatar-input"
-              type="url"
-              placeholder="Ссылка на новый аватар"
-              name="avatar"
-              required
-              className="popup__input popup__input_type_reference"
-            />
-            <span className="popup__input-error avatar-input-error"></span>
-          </PopupWithForm>
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
 
           <PopupWithForm name="confirmation" title="Вы уверены?">
             <button
