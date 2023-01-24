@@ -3,8 +3,8 @@ function ImagePopup(props) {
     <div className={`popup popup_photo ${props.card ? "popup_opened" : ""}`}>
       <div className="popup__container">
         <img
-          src={props.card ? props.card.link : ""}
-          alt={props.card ? props.card.name : ""}
+          src={props.card?.link}
+          alt={props.card?.name}
           className="popup__mask-group"
         />
         <h2 className="popup__phototitle">
