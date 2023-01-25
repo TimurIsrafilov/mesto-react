@@ -14,10 +14,9 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-
   const [cards, setCards] = useState([]);
-
   const [selectedCard, setSelectedCard] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
     api
@@ -37,8 +36,6 @@ function App() {
       })
       .catch((err) => console.log(`Ошибка.....: ${err}`));
   }
-
-  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
     api

@@ -2,30 +2,30 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup(props) {
-  const [place, setPlace] = React.useState("");
-  const [reference, setReference] = React.useState("");
-
-  const inputNameRef = React.useRef(0);
-  const inputLinkRef = React.useRef(0);
+  const inputNameRef = React.useRef(null);
+  const inputLinkRef = React.useRef(null);
 
   function handlePlaceChange(e) {
-    setPlace(e.target.value);
+    inputNameRef.value = e.target.value;
   }
 
   function handleReferenceChange(e) {
-    setReference(e.target.value);
+    inputLinkRef.value = e.target.value;
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
     props.onAddPlace({
-      name: place,
-      link: reference,
+      name: inputNameRef.current.value,
+      link: inputLinkRef.current.value,
     });
+  }
+
+  React.useEffect(() => {
     inputNameRef.current.value = "";
     inputLinkRef.current.value = "";
-  }
+  }, [props.isOpen]);
 
   return (
     <PopupWithForm
